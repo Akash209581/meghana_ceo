@@ -1,27 +1,10 @@
 import React, { useState } from 'react';
 import { FaPlay, FaCheckCircle, FaTrash, FaBell, FaPhone, FaClock, FaShare, FaEdit } from 'react-icons/fa';
 import SessionTimer from './SessionTimer';
+import { getPhotoUrl } from '../api';
 
 function TaskCard({ task, onStart, onComplete, onDelete, onCitizen, onAssign, onEdit, isActive }) {
   const [showTimer, setShowTimer] = useState(isActive);
-
-  const getPhotoUrl = (photoPath) => {
-    if (!photoPath) return '';
-    
-    // If it's already a full URL, return as is
-    if (photoPath.startsWith('http')) {
-      return photoPath;
-    }
-    
-    // If it's a relative path, construct the full URL
-    const backendUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-      ? 'http://localhost:5000'
-      : 'https://tasktracker-4xm2.onrender.com';
-    
-    // Properly encode the path (handle spaces and special characters)
-    const encodedPath = photoPath.split('/').map(part => encodeURIComponent(part)).join('/');
-    return `${backendUrl}${encodedPath}`;
-  };
 
   const getStatusColor = (status) => {
     switch (status) {

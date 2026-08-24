@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { FaCheck, FaExclamationTriangle, FaArrowLeft, FaEnvelope, FaCheckCircle, FaTimes, FaInfo } from 'react-icons/fa';
+import { getAPIBaseURL, getPhotoUrl } from '../api';
 
 function TaskAcknowledgement() {
-  // Extract taskId and token from URL: /acknowledge/taskId/token
+  // Extract taskId and token from URL (handles basepath /Dr.Meghana/acknowledge/taskId/token)
   const pathParts = window.location.pathname.split('/').filter(Boolean);
-  const taskId = pathParts[1];
-  const token = pathParts[2];
+  const ackIndex = pathParts.indexOf('acknowledge');
+  const taskId = ackIndex !== -1 ? pathParts[ackIndex + 1] : pathParts[1];
+  const token = ackIndex !== -1 ? pathParts[ackIndex + 2] : pathParts[2];
   const [task, setTask] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -30,9 +32,7 @@ function TaskAcknowledgement() {
   const fetchExtensionStatus = async () => {
     try {
       setExtensionStatusLoading(true);
-      const apiBaseURL = (typeof window !== 'undefined') && (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1')
-        ? 'https://tasktracker-4xm2.onrender.com/api'
-        : (import.meta.env.VITE_API_URL || 'http://localhost:5000/api');
+      const apiBaseURL = getAPIBaseURL();
       
       const apiUrl = `${apiBaseURL}/tasks/${taskId}/extension-status/${token}`;
       console.log('🔄 Fetching extension status from:', apiUrl);
@@ -56,9 +56,7 @@ function TaskAcknowledgement() {
   const fetchTaskDetails = async () => {
     try {
       setLoading(true);
-      const apiBaseURL = (typeof window !== 'undefined') && (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1')
-        ? 'https://tasktracker-4xm2.onrender.com/api'
-        : (import.meta.env.VITE_API_URL || 'http://localhost:5000/api');
+      const apiBaseURL = getAPIBaseURL();
       
       const apiUrl = `${apiBaseURL}/tasks/acknowledge/${token}`;
       console.log('🔄 Fetching task from:', apiUrl);
@@ -132,9 +130,7 @@ function TaskAcknowledgement() {
       setError('');
       setSuccessMessage('');
 
-      const apiBaseURL = (typeof window !== 'undefined') && (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1')
-        ? 'https://tasktracker-4xm2.onrender.com/api'
-        : (import.meta.env.VITE_API_URL || 'http://localhost:5000/api');
+      const apiBaseURL = getAPIBaseURL();
 
       const response = await fetch(`${apiBaseURL}/tasks/${taskId}/extension-request/${token}`, {
         method: 'POST',
@@ -171,9 +167,7 @@ function TaskAcknowledgement() {
       setError('');
       setSuccessMessage('');
 
-      const apiBaseURL = (typeof window !== 'undefined') && (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1')
-        ? 'https://tasktracker-4xm2.onrender.com/api'
-        : (import.meta.env.VITE_API_URL || 'http://localhost:5000/api');
+      const apiBaseURL = getAPIBaseURL();
 
       const apiUrl = `${apiBaseURL}/tasks/acknowledge/${token}/complete`;
       console.log('🔄 Marking task complete at:', apiUrl);
@@ -217,9 +211,7 @@ function TaskAcknowledgement() {
       setError('');
       setSuccessMessage('');
 
-      const apiBaseURL = (typeof window !== 'undefined') && (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1')
-        ? 'https://tasktracker-4xm2.onrender.com/api'
-        : (import.meta.env.VITE_API_URL || 'http://localhost:5000/api');
+      const apiBaseURL = getAPIBaseURL();
 
       const response = await fetch(`${apiBaseURL}/tasks/acknowledge/${token}/progress`, {
         method: 'POST',
@@ -270,9 +262,7 @@ function TaskAcknowledgement() {
             <strong>Debug Info:</strong><br/>
             Token: {token ? token.substring(0, 20) + '...' : 'None'}<br/>
             Task ID: {taskId}<br/>
-            API: {window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1'
-              ? 'https://tasktracker-4xm2.onrender.com/api'
-              : 'http://localhost:5000/api'}
+            API: getAPIBaseURL()
           </p>
           <a
             href="/"
@@ -409,7 +399,7 @@ function TaskAcknowledgement() {
               <div className="mb-6">
                 <p className="text-sm font-semibold text-gray-600 uppercase tracking-wide mb-2">Attached Photo</p>
                 <img 
-                  src={task.photo} 
+                  src={getPhotoUrl(task.photo)} 
                   alt="Task" 
                   className="w-full max-h-80 object-cover rounded-lg border-2 border-gray-200"
                 />

@@ -21,7 +21,7 @@ function App() {
   const [selectedTaskId, setSelectedTaskId] = useState(null); // State for task details page
 
   // Check if we're on acknowledgement page
-  const isAcknowledgementPage = window.location.pathname.startsWith('/acknowledge/');
+  const isAcknowledgementPage = window.location.pathname.includes('/acknowledge/');
 
   useEffect(() => {
     const savedPin = localStorage.getItem('adminPin');

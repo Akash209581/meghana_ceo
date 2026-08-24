@@ -246,18 +246,14 @@ router.post('/:taskId/acknowledge-link', adminAuth, async (req, res) => {
     await task.save();
 
     // Generate full URL (prefer env variable, fallback to request origin)
-    let baseUrl = process.env.FRONTEND_URL;
+    let baseUrl = process.env.FRONTEND_URL || 'https://160.187.169.41/Dr.Meghana';
     
-    if (!baseUrl) {
-      // Fallback: construct from request origin
+    if (!process.env.FRONTEND_URL) {
       const protocol = req.protocol || 'https';
       const host = req.get('host');
       
-      // For localhost, use production URL instead
       if (host && (host.includes('localhost') || host.includes('127.0.0.1'))) {
-        baseUrl = 'https://tasktracker-4xm2.onrender.com';
-      } else {
-        baseUrl = `${protocol}://${host}`;
+        baseUrl = 'http://localhost:3000/Dr.Meghana';
       }
     }
     

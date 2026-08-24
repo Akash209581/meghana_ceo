@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { FaBell, FaCheck, FaTimes, FaEdit, FaPhone, FaCalendar } from 'react-icons/fa';
+import { getAPIBaseURL } from '../api';
 
 function ExtensionNotifications() {
   const [notifications, setNotifications] = useState([]);
@@ -21,7 +22,7 @@ function ExtensionNotifications() {
   const fetchExtensionRequests = async () => {
     try {
       const adminPin = localStorage.getItem('adminPin') || '1234';
-      const response = await fetch('http://localhost:5000/api/tasks/extension-requests/all', {
+      const response = await fetch(`${getAPIBaseURL()}/tasks/extension-requests/all`, {
         headers: {
           'admin-pin': adminPin,
           'Content-Type': 'application/json',
@@ -45,7 +46,7 @@ function ExtensionNotifications() {
       const adminPin = localStorage.getItem('adminPin') || '1234';
       const finalDeadline = newDeadline || selectedTask.requestedDeadlineExtension;
       
-      const response = await fetch(`http://localhost:5000/api/tasks/extension-requests/${selectedTask.taskId || selectedTask._id}/approve`, {
+      const response = await fetch(`${getAPIBaseURL()}/tasks/extension-requests/${selectedTask.taskId || selectedTask._id}/approve`, {
         method: 'POST',
         headers: {
           'admin-pin': adminPin,
@@ -75,7 +76,7 @@ function ExtensionNotifications() {
   const handleReject = async () => {
     try {
       const adminPin = localStorage.getItem('adminPin') || '1234';
-      const response = await fetch(`http://localhost:5000/api/tasks/extension-requests/${selectedTask.taskId || selectedTask._id}/reject`, {
+      const response = await fetch(`${getAPIBaseURL()}/tasks/extension-requests/${selectedTask.taskId || selectedTask._id}/reject`, {
         method: 'POST',
         headers: {
           'admin-pin': adminPin,

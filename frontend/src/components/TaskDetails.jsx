@@ -1,23 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { FaArrowLeft, FaUser, FaPhone, FaClock, FaCheckCircle, FaTimesCircle, FaClipboard, FaCalendarAlt, FaMapMarkerAlt } from 'react-icons/fa';
+import { getAPIBaseURL } from '../api';
 
 function TaskDetails({ taskId, onBack }) {
   const [task, setTask] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [contactPhone, setContactPhone] = useState('N/A');
-
-  const getAPIBaseURL = () => {
-    if (typeof window !== 'undefined') {
-      const hostname = window.location.hostname;
-      const isProduction = hostname !== 'localhost' && hostname !== '127.0.0.1';
-      
-      if (isProduction) {
-        return 'https://tasktracker-4xm2.onrender.com/api';
-      }
-    }
-    return 'http://localhost:5000/api';
-  };
 
   useEffect(() => {
     fetchTaskDetails();

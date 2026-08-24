@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { FaPlus, FaTrash, FaPlay, FaCheck, FaShare, FaUsers, FaTimes, FaPhone, FaEdit } from 'react-icons/fa';
-import { tasksAPI, whatsappAPI, settingsAPI } from '../api';
+import { tasksAPI, whatsappAPI, settingsAPI, getPhotoUrl, getAPIBaseURL } from '../api';
 import TaskForm from './TaskForm';
 import TaskCard from './TaskCard';
 import SessionTimer from './SessionTimer';
@@ -104,10 +104,7 @@ function Tasks({ adminPin, selectedAssignee, selectedStatus, selectedSector: sel
 
   const handleCreateTask = async (formData) => {
     try {
-      const pin = localStorage.getItem('adminPin');
-      const apiBaseURL = (typeof window !== 'undefined') && (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1')
-        ? 'https://tasktracker-4xm2.onrender.com/api'
-        : (import.meta.env.VITE_API_URL || 'http://localhost:5000/api');
+      const apiBaseURL = getAPIBaseURL();
       
       let response;
       
@@ -257,29 +254,12 @@ Thank you for your patience. For any queries, please contact us.`;
     setShowMessageModal(true);
   };
 
-  // Helper function to construct photo URL with proper encoding
-  const getPhotoUrl = (photoPath) => {
-    if (!photoPath) return '';
-    // Images are now stored as Cloudinary URLs or full URLs, return directly
-    if (photoPath.startsWith('http')) return photoPath;
-    
-    // Fallback for legacy local URLs
-    const backendUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-      ? 'http://localhost:5000'
-      : 'https://tasktracker-4xm2.onrender.com';
-    
-    const encodedPath = photoPath.split('/').map(part => encodeURIComponent(part)).join('/');
-    return `${backendUrl}${encodedPath}`;
-  };
-
   // NEW: Handle automatic Assign button click
   const handleAssignClick = async (task) => {
     try {
       setGeneratingLink(true);
       const pin = localStorage.getItem('adminPin');
-      const apiBaseURL = (typeof window !== 'undefined') && (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1')
-        ? 'https://tasktracker-4xm2.onrender.com/api'
-        : (import.meta.env.VITE_API_URL || 'http://localhost:5000/api');
+      const apiBaseURL = getAPIBaseURL();
 
       // Get phone number from task or fetch from contacts
       let phoneNumber = task.assignedToPhone;
@@ -391,9 +371,7 @@ Thank you!`;
     try {
       setGeneratingLink(true);
       const pin = localStorage.getItem('adminPin');
-      const apiBaseURL = (typeof window !== 'undefined') && (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1')
-        ? 'https://tasktracker-4xm2.onrender.com/api'
-        : (import.meta.env.VITE_API_URL || 'http://localhost:5000/api');
+      const apiBaseURL = getAPIBaseURL();
 
       const response = await fetch(`${apiBaseURL}/tasks/${task._id}/acknowledge-link`, {
         method: 'POST',

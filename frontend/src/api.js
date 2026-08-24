@@ -1,23 +1,41 @@
 import axios from 'axios';
 
 // Get the correct API URL based on environment
-function getAPIBaseURL() {
-  // Check if we're in production (Netlify deployment)
+export function getAPIBaseURL() {
+  if (import.meta.env.VITE_API_URL) {
+    return import.meta.env.VITE_API_URL;
+  }
+  
   if (typeof window !== 'undefined') {
     const hostname = window.location.hostname;
     const isProduction = hostname !== 'localhost' && hostname !== '127.0.0.1';
     
     if (isProduction) {
-      // Production - use Render backend
-      return 'https://tasktracker-4xm2.onrender.com/api';
+      return `${window.location.origin}/megha/api`;
     }
   }
   
-  // Local development - use localhost or environment variable
-  return import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+  return 'http://localhost:5000/megha/api';
 }
 
-const API_BASE_URL = getAPIBaseURL();
+export const API_BASE_URL = getAPIBaseURL();
+
+// Helper to construct full URL for images/photos
+export const getPhotoUrl = (photoPath) => {
+  if (!photoPath) return '';
+  if (photoPath.startsWith('http://') || photoPath.startsWith('https://')) {
+    return photoPath;
+  }
+  const cleanPath = photoPath.startsWith('/') ? photoPath : `/${photoPath}`;
+  const finalPath = cleanPath.startsWith('/megha') ? cleanPath : `/megha${cleanPath}`;
+  
+  if (typeof window !== 'undefined') {
+    if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+      return `${window.location.origin}${finalPath}`;
+    }
+  }
+  return `http://localhost:5000${finalPath}`;
+};
 
 console.log('Environment:', window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1' ? 'PRODUCTION' : 'DEVELOPMENT');
 console.log('API Base URL:', API_BASE_URL);

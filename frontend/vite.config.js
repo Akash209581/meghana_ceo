@@ -20,6 +20,7 @@ const spaFallbackPlugin = {
 };
 
 export default defineConfig({
+  base: process.env.VITE_BASE_PATH || '/Dr.Meghana/',
   plugins: [
     react(), 
     spaFallbackPlugin,
@@ -54,6 +55,10 @@ export default defineConfig({
   server: {
     port: 3000,
     proxy: {
+      '/megha/api': {
+        target: 'http://localhost:5000',
+        changeOrigin: true,
+      },
       '/api': {
         target: 'http://localhost:5000',
         changeOrigin: true,
@@ -62,6 +67,7 @@ export default defineConfig({
   },
   build: {
     outDir: 'dist',
+    sourcemap: false,
     minify: 'terser',
     terserOptions: {
       compress: {
