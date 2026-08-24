@@ -56,11 +56,11 @@ export default defineConfig({
     port: 3000,
     proxy: {
       '/megha/api': {
-        target: 'http://localhost:5000',
+        target: 'http://localhost:9000',
         changeOrigin: true,
       },
       '/api': {
-        target: 'http://localhost:5000',
+        target: 'http://localhost:9000',
         changeOrigin: true,
       },
     },

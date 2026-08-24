@@ -15,7 +15,7 @@ export function getAPIBaseURL() {
     }
   }
   
-  return 'http://localhost:5000/megha/api';
+  return 'http://localhost:9000/megha/api';
 }
 
 export const API_BASE_URL = getAPIBaseURL();
@@ -34,7 +34,7 @@ export const getPhotoUrl = (photoPath) => {
       return `${window.location.origin}${finalPath}`;
     }
   }
-  return `http://localhost:5000${finalPath}`;
+  return `http://localhost:9000${finalPath}`;
 };
 
 console.log('Environment:', window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1' ? 'PRODUCTION' : 'DEVELOPMENT');

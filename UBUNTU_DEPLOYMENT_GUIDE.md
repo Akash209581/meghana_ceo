@@ -72,7 +72,7 @@ npm install --production
 Create or update `/var/www/megha-backend/.env`:
 
 ```env
-PORT=5000
+PORT=9000
 MONGODB_URI=mongodb+srv://jashwanthannavarapu99_db_user:42974297@cluster2.fytx2uj.mongodb.net/test?appName=Cluster2
 ADMIN_PIN=9999
 FRONTEND_URL=https://160.187.169.41/Dr.Meghana
@@ -169,7 +169,7 @@ server {
 
     # 2. BACKEND (/megha)
     location /megha/ {
-        proxy_pass http://127.0.0.1:5000/megha/;
+        proxy_pass http://127.0.0.1:9000/megha/;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';
