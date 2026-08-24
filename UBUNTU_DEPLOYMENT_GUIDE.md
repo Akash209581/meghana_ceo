@@ -78,15 +78,16 @@ ADMIN_PIN=9999
 FRONTEND_URL=https://160.187.169.41/Dr.Meghana
 BACKEND_URL=https://160.187.169.41/megha
 USE_CLOUDINARY=false
+UPLOADS_DIR=/ceo/data/uploads
 ADMIN_PHONE_NUMBER=+918374994997
 ```
 
-### Step 3.4: Setup Local Uploads Directory
-Create the `uploads/` directory on the server disk and set appropriate permissions:
+### Step 3.4: Setup Custom Local Uploads Directory (`/ceo/data/uploads`)
+Create the custom uploads directory on the server disk and set appropriate permissions:
 
 ```bash
-mkdir -p /var/www/megha-backend/uploads
-chmod -R 777 /var/www/megha-backend/uploads
+sudo mkdir -p /ceo/data/uploads
+sudo chmod -R 777 /ceo/data/uploads
 ```
 
 ### Step 3.5: Start Backend Process with PM2

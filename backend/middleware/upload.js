@@ -7,15 +7,25 @@ import cloudinary from '../config/cloudinary.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Ensure local uploads directory exists
-const uploadsDir = path.join(__dirname, '..', 'uploads');
-if (!fs.existsSync(uploadsDir)) {
-  fs.mkdirSync(uploadsDir, { recursive: true });
+// Ensure local uploads directory exists (use UPLOADS_DIR env if specified)
+const uploadsDir = process.env.UPLOADS_DIR || path.join(__dirname, '..', 'uploads');
+try {
+  if (!fs.existsSync(uploadsDir)) {
+    fs.mkdirSync(uploadsDir, { recursive: true });
+  }
+} catch (err) {
+  console.warn('⚠️ Could not automatically create uploadsDir:', uploadsDir, err.message);
 }
 
 // Multer Disk Storage for local server uploads
 const diskStorage = multer.diskStorage({
   destination: (req, file, cb) => {
+    // Re-verify directory exists before saving
+    if (!fs.existsSync(uploadsDir)) {
+      try {
+        fs.mkdirSync(uploadsDir, { recursive: true });
+      } catch (e) {}
+    }
     cb(null, uploadsDir);
   },
   filename: (req, file, cb) => {

@@ -73,9 +73,13 @@ const staticUploadOptions = {
   }
 };
 
-const uploadsPath = path.join(__dirname, 'uploads');
-if (!fs.existsSync(uploadsPath)) {
-  fs.mkdirSync(uploadsPath, { recursive: true });
+const uploadsPath = process.env.UPLOADS_DIR || path.join(__dirname, 'uploads');
+try {
+  if (!fs.existsSync(uploadsPath)) {
+    fs.mkdirSync(uploadsPath, { recursive: true });
+  }
+} catch (err) {
+  console.warn('⚠️ Could not automatically create uploadsPath:', uploadsPath, err.message);
 }
 
 app.use('/megha/uploads', express.static(uploadsPath, staticUploadOptions));
