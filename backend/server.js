@@ -37,14 +37,6 @@ const allowedOrigins = [
   // Production server IP & subpaths
   'https://160.187.169.41',
   'http://160.187.169.41',
-  // Production - Netlify & Render
-  'https://tasktracker4297.netlify.app',
-  'https://tasktracker-4xm2.onrender.com',
-  // Custom domains
-  'https://krishnalavu.com',
-  'https://www.krishnalvu.com',
-  'https://krishnalvu.com',
-  'https://www.krishnalavu.com',
   process.env.FRONTEND_URL,
 ].filter(Boolean);
 
