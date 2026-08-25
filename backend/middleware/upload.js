@@ -73,9 +73,24 @@ export const uploadToCloudinary = async (req, res, next) => {
   // Handle local disk storage
   if (!useCloudinary) {
     const relativeUrl = `/megha/uploads/${req.file.filename}`;
+    const fullSourcePath = req.file.path || path.join(uploadsDir, req.file.filename);
     req.file.cloudinaryUrl = relativeUrl;
     req.file.path = relativeUrl;
     console.log('📸 Local file saved successfully:', relativeUrl);
+
+    // Auto-backup copy to backup directory
+    const backupDir = process.env.BACKUP_DIR || '/ceo/backup/upload';
+    try {
+      if (!fs.existsSync(backupDir)) {
+        fs.mkdirSync(backupDir, { recursive: true });
+      }
+      const targetPath = path.join(backupDir, req.file.filename);
+      fs.copyFileSync(fullSourcePath, targetPath);
+      console.log('💾 File automatically backed up to:', targetPath);
+    } catch (backupErr) {
+      console.warn('⚠️ Could not copy file to backupDir:', backupErr.message);
+    }
+
     return next();
   }
 
