@@ -105,6 +105,7 @@ function Tasks({ adminPin, selectedAssignee, selectedStatus, selectedSector: sel
   const handleCreateTask = async (formData) => {
     try {
       const apiBaseURL = getAPIBaseURL();
+      const pin = localStorage.getItem('adminPin') || adminPin;
       
       let response;
       
